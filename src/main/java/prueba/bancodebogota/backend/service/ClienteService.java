@@ -19,8 +19,6 @@ public class ClienteService implements IClienteService {
 
     @Override
     public ClienteDTO findByTipoDocumentoAndNumeroDocumento(String tipoDocumento, String numeroDocumento) {
-        System.out.println("Tipo de documento: " + tipoDocumento);
-        System.out.println("Numero de documento: " + numeroDocumento);
         if (tipoDocumento == null || numeroDocumento == null) {
             throw new IllegalArgumentException("Tipo de documento y numero de documento son requeridos");
         }

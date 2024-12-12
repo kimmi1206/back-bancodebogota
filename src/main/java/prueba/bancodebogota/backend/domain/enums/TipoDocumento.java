@@ -17,7 +17,6 @@ public enum TipoDocumento {
     public static TipoDocumento findByValue(String value) {
         TipoDocumento result = null;
         for (TipoDocumento docType : values()) {
-            System.out.println(docType.getValue());
             if (docType.getValue().equalsIgnoreCase(value)) {
                 result = docType;
                 break;

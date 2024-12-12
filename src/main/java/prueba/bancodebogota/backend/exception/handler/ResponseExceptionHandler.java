@@ -21,62 +21,37 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNotFoundException(
             NotFoundException ex, WebRequest request) {
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Elemento No Encontrado");
-
-        Loggers.log(Level.SEVERE, "ERROR: NotFoundException --> Class, Method, Line Number: ({0})",
-                Arrays.stream(ex.getStackTrace()).limit(5).toList());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return buildResponseEntity(HttpStatus.NOT_FOUND, "Not found", "Elemento No Encontrado", null, null, null);
     }
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> handleNullPointerException(
             NullPointerException ex, WebRequest request) {
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Internal Server Error");
-
         Loggers.log(Level.SEVERE, "ERROR: NullPointerException --> Class, Method, Line Number: ({0})",
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Null pointer", "Internal Server Error", LocalDateTime.now(), null, null);
     }
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<Object> handleNumberFormatException(
             NumberFormatException ex, WebRequest request) {
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Valores no válidos");
-
-        Loggers.log(Level.SEVERE, "ERROR: NumberFormatException --> Class, Method, Line Number: ({0})",
-                Arrays.stream(ex.getStackTrace()).limit(5).toList());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Number format", "Valores no válidos", null, null, null);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(
             IllegalArgumentException ex, WebRequest request) {
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Parametros Requeridos");
-
-        Loggers.log(Level.SEVERE, "ERROR: IllegalArgumentException --> Class, Method, Line Number: ({0})",
-                Arrays.stream(ex.getStackTrace()).limit(5).toList());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Illegal argument", "Parametros Requeridos", null, null, null);
     }
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             @NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,
             HttpStatusCode status, @NonNull WebRequest request) {
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDate.now());
-        body.put("status", status.value());
 
         List<String> errors = new ArrayList<>();
         try {
@@ -88,9 +63,32 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         } catch (Exception exc) {
             Loggers.log(Level.SEVERE, exc.getMessage());
         }
-        body.put("errors", errors);
 
-        Loggers.log(Level.INFO, "ERROR: MethodArgumentNotValidException --> ({0})", body);
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Method argument not valid", null, null, status, errors);
+    }
+
+    private ResponseEntity<Object> buildResponseEntity(HttpStatus status, String error, String message, LocalDateTime timestamp, HttpStatusCode statusBody, List<String> errors) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        Map<String, Object> body = new LinkedHashMap<>();
+
+        body.put("error", error);
+        if (message != null) {
+            body.put("message", message);
+        }
+        if (timestamp != null) {
+            body.put("timestamp", timestamp);
+        }
+        if (statusBody != null) {
+            body.put("status", statusBody.value());
+        }
+        if (errors != null) {
+            body.put("errors", errors);
+        }
+
+        response.put("data", body);
+        response.put("status", status.value());
+        response.put("statusText", status.getReasonPhrase());
+
+        return new ResponseEntity<>(response, status);
     }
 }
