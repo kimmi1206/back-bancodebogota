@@ -5,10 +5,12 @@ import org.springframework.http.*;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import prueba.bancodebogota.backend.exception.type.NotFoundException;
 
+import java.io.IOException;
 import java.time.*;
 import java.util.*;
 import java.util.logging.*;
@@ -32,6 +34,26 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
 
         return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Null pointer", "Internal Server Error", LocalDateTime.now(), null, null);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<Object> handleIOException(
+            IOException ex, WebRequest request) {
+
+        Loggers.log(Level.SEVERE, "ERROR: IOException --> Class, Method, Line Number: ({0})",
+                Arrays.stream(ex.getStackTrace()).limit(5).toList());
+
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Failed or interrupted I/O operation", "Internal Server Error", LocalDateTime.now(), null, null);
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<Object> handleHttpClientErrorException(
+            HttpClientErrorException ex, WebRequest request) {
+
+        Loggers.log(Level.SEVERE, "ERROR: HttpClientErrorException --> Class, Method, Line Number: ({0})",
+                Arrays.stream(ex.getStackTrace()).limit(5).toList());
+
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Error when executing Http Request", "Internal Server Error", LocalDateTime.now(), null, null);
     }
 
     @ExceptionHandler(NumberFormatException.class)

@@ -7,6 +7,7 @@ import prueba.bancodebogota.backend.domain.mapper.ClienteMapper;
 import prueba.bancodebogota.backend.exception.type.NotFoundException;
 import prueba.bancodebogota.backend.repository.IClienteRepository;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service

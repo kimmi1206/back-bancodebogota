@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1000,
+    "tipoDocumento": "C",
+    "numeroDocumento": "23445322",
+    "primerNombre": "Carlos",
+    "segundoNombre": "Juan",
+    "primerApellido": "Smith",
+    "segundoApellido": "Arbelaez",
+    "telefono": "3002345678",
+    "direccion": "Calle 123 # 56 - 78",
+    "ciudadResidencia": "Bogotá"
+  },
+  {
+    "id": 2000,
+    "tipoDocumento": "P",
+    "numeroDocumento": "1039454860",
+    "primerNombre": "Jhenny",
+    "segundoNombre": "Andrea",
+    "primerApellido": "Pérez",
+    "segundoApellido": "Montoya",
+    "telefono": "3001234567",
+    "direccion": "Calle 123 # 45 - 67",
+    "ciudadResidencia": "Bogotá"
+  },
+  {
+    "id": 3000,
+    "tipoDocumento": "C",
+    "numeroDocumento": "103234560",
+    "primerNombre": "Emanuel",
+    "segundoNombre": "",
+    "primerApellido": "Londoño",
+    "segundoApellido": "Estrella",
+    "telefono": "3003456789",
+    "direccion": "Calle 145 # 67 - 89",
+    "ciudadResidencia": "Bogotá"
+  }
+]
