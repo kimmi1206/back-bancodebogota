@@ -16,13 +16,13 @@ import java.util.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("api/v1/clientes")
+@RequestMapping("/api/v1/clientes")
 public class ClienteController {
     private final IClienteService clienteService;
     private final RestTemplate restTemplate;
 
-    @Value("${base.url}")
-    private String baseUrl;
+    @Value("${bucket.url}")
+    private String bucketUrl;
 
     @Autowired
     public ClienteController(IClienteService clienteService, RestTemplateBuilder restTemplate) {
@@ -38,7 +38,7 @@ public class ClienteController {
     @GetMapping("/download")
     public ResponseEntity<?> downloadFile() throws IOException {
         String fileName = "clientes.json";
-        String url = baseUrl + fileName;
+        String url = bucketUrl + fileName;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_OCTET_STREAM));
