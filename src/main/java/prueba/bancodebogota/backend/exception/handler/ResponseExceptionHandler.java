@@ -55,7 +55,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         Loggers.log(Level.SEVERE, "ERROR: HttpClientErrorException --> Class, Method, Line Number: ({0})",
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
 
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Error when executing Http Request: " + ex.getMessage(), LocalDateTime.now(), null, null);
+        return buildResponseEntity(HttpStatus.BAD_GATEWAY, "Bad Gateway", "Error when executing Http Request: " + ex.getMessage(), LocalDateTime.now(), null, null);
     }
 
     @ExceptionHandler(InsufficientStorageException.class)
@@ -65,7 +65,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         Loggers.log(Level.SEVERE, "ERROR: InsufficientStorageException --> Class, Method, Line Number: ({0})",
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
 
-        return buildResponseEntity(HttpStatus.INSUFFICIENT_STORAGE, "Internal Server Error", "Error when downloading file: " + ex.getMessage(), LocalDateTime.now(), null, null);
+        return buildResponseEntity(HttpStatus.INSUFFICIENT_STORAGE, "Insufficient Storage", "Error when downloading file: " + ex.getMessage(), LocalDateTime.now(), null, null);
     }
 
     @ExceptionHandler(NumberFormatException.class)

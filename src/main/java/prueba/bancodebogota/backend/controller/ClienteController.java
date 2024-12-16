@@ -29,6 +29,9 @@ public class ClienteController {
     @Value("${bucket.url}")
     private String bucketUrl;
 
+    @Value("${bucket.file-size-limit-kb}")
+    private int fileSizeLimit;
+    
     @Autowired
     public ClienteController(IClienteService clienteService, RestTemplateBuilder restTemplate) {
         this.clienteService = clienteService;
@@ -45,16 +48,7 @@ public class ClienteController {
         String fileName = "clientes.json";
         String url = bucketUrl + fileName;
 
-        try {
-            File myFile = new File(fileName);
-            Files.delete(myFile.toPath());
-        } catch (Exception e) {
-            if (!(e instanceof NoSuchFileException)) {
-                logger.error("Failed to delete the file", e);
-            }
-        }
-
-        int fileSize = -1;
+        int fileSize = 0;
          try {
             URL urlObj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
@@ -65,10 +59,10 @@ public class ClienteController {
             logger.error("Error while checking file size", e);
         }
 
-        if (fileSize == -1) {
-            throw new InsufficientStorageException("File size is unknown");
-        } else if (fileSize > 8192) {
-            throw new InsufficientStorageException("File size exceeds the limit of 8Kb: " + fileSize + " bytes");
+        if (fileSize == 0) {
+            throw new NotFoundException("File is empty or does not exists");
+        } else if (fileSize > fileSizeLimit * 1024) {
+            throw new InsufficientStorageException("File size exceeds the limit of " + fileSizeLimit + "Kb: " + fileSize + " bytes");
         }
 
         HttpHeaders headers = new HttpHeaders();
