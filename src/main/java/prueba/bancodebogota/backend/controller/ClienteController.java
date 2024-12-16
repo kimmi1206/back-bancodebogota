@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping("/api/v1/clientes")
 public class ClienteController {
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
