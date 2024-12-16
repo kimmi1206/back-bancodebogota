@@ -2,7 +2,6 @@ package prueba.bancodebogota.backend.repository;
 
 import org.springframework.stereotype.Repository;
 import prueba.bancodebogota.backend.domain.entity.Cliente;
-import prueba.bancodebogota.backend.exception.type.NotFoundException;
 
 import java.util.*;
 

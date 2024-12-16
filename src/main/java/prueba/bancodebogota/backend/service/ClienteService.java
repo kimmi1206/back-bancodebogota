@@ -7,7 +7,6 @@ import prueba.bancodebogota.backend.domain.mapper.ClienteMapper;
 import prueba.bancodebogota.backend.exception.type.NotFoundException;
 import prueba.bancodebogota.backend.repository.IClienteRepository;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -31,7 +30,7 @@ public class ClienteService implements IClienteService {
         }
         return ClienteMapper.mapToClienteDTO(
                 Optional.ofNullable(clienteRepository
-                                .findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento))
+                        .findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento))
                         .orElseThrow(() -> new NotFoundException("Cliente no encontrado")));
     }
 
