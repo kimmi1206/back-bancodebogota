@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.logging.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping("/api/v1/clientes")
 public class ClienteController {
     private static final Logger logger = Logger.getLogger(ResponseExceptionHandler.class.getName());
