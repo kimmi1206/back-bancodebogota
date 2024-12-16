@@ -66,7 +66,7 @@ public class ClienteController {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_OCTET_STREAM));
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
 
@@ -79,6 +79,6 @@ public class ClienteController {
                 .toAbsolutePath().normalize().resolve(fileName).normalize();
         Resource file = new UrlResource(filePath.toUri());
 
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(file);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(file);
     }
 }
