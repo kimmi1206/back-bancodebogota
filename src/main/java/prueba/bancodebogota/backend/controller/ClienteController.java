@@ -39,7 +39,7 @@ public class ClienteController {
     }
 
     @GetMapping("/buscar")
-    public ClienteDTO searchClienteDTO(@RequestParam String tipoDocumento, @RequestParam String numeroDocumento) {
+    public ClienteDTO searchCliente(@RequestParam String tipoDocumento, @RequestParam String numeroDocumento) {
         return clienteService.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento);
     }
 
