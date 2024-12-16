@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import prueba.bancodebogota.backend.exception.type.InsufficientStorageException;
 import prueba.bancodebogota.backend.exception.type.NotFoundException;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNotFoundException(
             NotFoundException ex, WebRequest request) {
 
-        return buildResponseEntity(HttpStatus.NOT_FOUND, "Not found", "Elemento No Encontrado", null, null, null);
+        return buildResponseEntity(HttpStatus.NOT_FOUND, "Not found", "Elemento No Encontrado: " + ex.getMessage(), null, null, null);
     }
 
     @ExceptionHandler(NullPointerException.class)
@@ -33,7 +35,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         Loggers.log(Level.SEVERE, "ERROR: NullPointerException --> Class, Method, Line Number: ({0})",
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
 
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Null pointer", "Internal Server Error", LocalDateTime.now(), null, null);
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Null pointer: " + ex.getMessage(), LocalDateTime.now(), null, null);
     }
 
     @ExceptionHandler(IOException.class)
@@ -43,7 +45,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         Loggers.log(Level.SEVERE, "ERROR: IOException --> Class, Method, Line Number: ({0})",
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
 
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Failed or interrupted I/O operation", "Internal Server Error", LocalDateTime.now(), null, null);
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Failed or interrupted I/O operation: " + ex.getMessage(), LocalDateTime.now(), null, null);
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
@@ -53,21 +55,31 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         Loggers.log(Level.SEVERE, "ERROR: HttpClientErrorException --> Class, Method, Line Number: ({0})",
                 Arrays.stream(ex.getStackTrace()).limit(5).toList());
 
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Error when executing Http Request", "Internal Server Error", LocalDateTime.now(), null, null);
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Error when executing Http Request: " + ex.getMessage(), LocalDateTime.now(), null, null);
+    }
+
+    @ExceptionHandler(InsufficientStorageException.class)
+    public ResponseEntity<Object> handleInsufficientStorageException(
+        InsufficientStorageException ex, WebRequest request) {
+
+        Loggers.log(Level.SEVERE, "ERROR: InsufficientStorageException --> Class, Method, Line Number: ({0})",
+                Arrays.stream(ex.getStackTrace()).limit(5).toList());
+
+        return buildResponseEntity(HttpStatus.INSUFFICIENT_STORAGE, "Internal Server Error", "Error when downloading file: " + ex.getMessage(), LocalDateTime.now(), null, null);
     }
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<Object> handleNumberFormatException(
             NumberFormatException ex, WebRequest request) {
 
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Number format", "Valores no válidos", null, null, null);
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Number format", "Valores no válidos: " + ex.getMessage(), null, null, null);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(
             IllegalArgumentException ex, WebRequest request) {
 
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Illegal argument", "Parametros Requeridos", null, null, null);
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Illegal argument", "Parametros Requeridos: " + ex.getMessage(), null, null, null);
     }
 
     @Override
