@@ -37,8 +37,8 @@ public class ClienteController {
         this.restTemplate = restTemplate.build();
     }
 
-    @GetMapping("/")
-    public ClienteDTO getClienteDTO(@RequestParam String tipoDocumento, @RequestParam String numeroDocumento) {
+    @GetMapping("/buscar")
+    public ClienteDTO searchCliente(@RequestParam String tipoDocumento, @RequestParam String numeroDocumento) {
         return clienteService.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento);
     }
 
